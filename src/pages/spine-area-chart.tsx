@@ -3,19 +3,19 @@ import React from 'react';
 import { Container, Box, Typography } from '@mui/material';
 import dynamic from 'next/dynamic';
 
-const StepLineChart = dynamic(() => import('../components/StepLineChart'), { ssr: false });
+const SpineAreaChartChart = dynamic(() => import('../components/SpineAreaChart'), { ssr: false });
 
-const StepLineChartPage = () => {
+const SpineAreaChartPage = () => {
     return (
         <Container>
             <Box my={4}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Monthly Revenue
+                    Price Chart
                 </Typography>
-                <StepLineChart />
+                <SpineAreaChartChart />
             </Box>
         </Container>
     );
 };
 
-export default StepLineChartPage;
+export default SpineAreaChartPage;

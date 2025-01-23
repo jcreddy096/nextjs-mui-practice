@@ -1,24 +1,32 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-const data = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    datasets: [
-        {
-            label: 'Simple Dataset',
-            data: [12, 19, 3, 5, 2, 3, 9],
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
+const LineChart = () => {
+    const options: ApexOptions = {
+        chart: {
+            type: 'line',
+            height: 350,
+            toolbar: {
+                show: false
+            },
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            categories: ['00', '03', '06', '09', '12', '15', '18', '21'],
         }
-    ]
+    };
+
+    const series = [{
+        name: 'Avg Temp Changes by Hrs',
+        data: [15, 18, 20, 31, 29, 25, 20, 18]
+    }];
+
+    return (
+        <Chart options={options} series={series} type="line" height={350} />
+    );
 };
 
-const SimpleLineChart = () => {
-    return <Line data={data} />;
-};
-
-export default SimpleLineChart;
+export default LineChart;

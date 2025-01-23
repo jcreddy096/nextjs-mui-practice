@@ -1,25 +1,38 @@
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-        {
-            label: 'My First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            backgroundColor: 'rgba(91, 28, 215, 0.2)',
-            borderColor: 'rgb(245, 9, 9)',
-            borderWidth: 1
-        }
-    ]
-};
+import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 
 const BarChart = () => {
+    const options: ApexOptions = {
+        chart: {
+            type: 'bar' as const,
+            height: 350,
+            toolbar: {
+                show: false
+            },
+        },
+        plotOptions: {
+            bar: {
+                borderRadius: 5,
+                horizontal: false,
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            categories: ['Chemistry', 'Physics', 'EC', 'English', 'Maths', 'Drawing', 'Lab'],
+        },
+        colors: ['rgba(91, 28, 215, 0.2)', 'rgb(245, 9, 9)']
+    };
+
+    const series = [{
+        name: 'Student Marks',
+        data: [65, 59, 80, 81, 56, 55, 40]
+    }];
+
     return (
-        <Bar data={data} />
+        <Chart options={options} series={series} type="bar" height={350} />
     );
 };
 

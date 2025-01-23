@@ -1,16 +1,21 @@
-import * as React from 'react';
-import { Box, Container, Typography } from '@mui/material';
-import AreaChart from '../components/AreaChart';
 
-export default function AreaChartPage() {
-  return (
-    <Container className="container">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Area Chart
-      </Typography>
-      <Box className="chart-container">
-        <AreaChart />
-      </Box>
-    </Container>
-  );
-}
+import React from 'react';
+import { Container, Box, Typography } from '@mui/material';
+import dynamic from 'next/dynamic';
+
+const AreaChart = dynamic(() => import('../components/AreaChart'), { ssr: false });
+
+const AreaChartPage = () => {
+    return (
+        <Container>
+            <Box>
+                <Typography variant="h4" component="h1" gutterBottom>
+                Movie Tickets
+                </Typography>
+                <AreaChart />
+            </Box>
+        </Container>
+    );
+};
+
+export default AreaChartPage;

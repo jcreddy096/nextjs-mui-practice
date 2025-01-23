@@ -1,26 +1,31 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
-
-const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-        {
-            label: 'My First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: true, 
-            backgroundColor: 'rgba(117, 217, 217, 0.37)',
-            borderColor: 'rgba(35, 203, 85, 0.91)',
-            tension: 0.1
-        }
-    ]
-};
+import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 
 const AreaChart = () => {
+    const options: ApexOptions = {
+        chart: {
+            type: 'area',
+            height: 350,
+            toolbar:{
+                show:false
+            },
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        }
+    };
+
+    const series = [{
+        name: 'Movie Tickets',
+        data: [365, 259, 140, 181, 456, 585, 690]
+    }];
+
     return (
-        <Line data={data} />
+        <Chart options={options} series={series} type="area" height={350} />
     );
 };
 
