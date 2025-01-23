@@ -5,26 +5,26 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const data = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['Pink', 'Blue', 'Orange', 'Green', 'Purple', 'Brown'],
     datasets: [
         {
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: [10, 19, 3, 5, 2, 3],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(31, 28, 227, 0.88)',
-                'rgba(239, 175, 13, 0.43)',
+                'rgba(243, 110, 9, 0.89)',
                 'rgba(11, 241, 130, 0.65)',
-                'rgba(50, 27, 94, 0.55)',
+                'rgba(207, 20, 195, 0.77)',
                 'rgba(210, 157, 103, 0.86)'
             ],
             borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
+                'rgb(230, 87, 118)',
+                'rgb(72, 170, 235)',
+                'rgb(187, 144, 35)',
+                'rgb(77, 245, 245)',
+                'rgb(105, 54, 208)',
+                'rgb(142, 186, 20)'
             ],
             borderWidth: 1
         }

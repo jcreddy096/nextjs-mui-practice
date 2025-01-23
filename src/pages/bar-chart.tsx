@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import BarChart from '../components/BarChart';
 
 export default function BarChartPage() {
@@ -8,9 +8,9 @@ export default function BarChartPage() {
       <Typography variant="h4" component="h1" gutterBottom>
         Bar Chart
       </Typography>
-      <div className="chart-container">
+      <Box className="chart-container">
         <BarChart />
-      </div>
+      </Box>
     </Container>
   );
 }

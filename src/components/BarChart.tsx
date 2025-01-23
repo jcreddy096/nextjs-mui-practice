@@ -10,8 +10,8 @@ const data = {
         {
             label: 'My First Dataset',
             data: [65, 59, 80, 81, 56, 55, 40],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(91, 28, 215, 0.2)',
+            borderColor: 'rgb(245, 9, 9)',
             borderWidth: 1
         }
     ]

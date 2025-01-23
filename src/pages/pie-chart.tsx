@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import PieChart from '../components/PieChart';
 
 export default function PieChartPage() {
@@ -8,9 +8,9 @@ export default function PieChartPage() {
       <Typography variant="h4" component="h1" gutterBottom>
         Pie Chart
       </Typography>
-      <div className="chart-container">
+      <Box className="chart-container">
         <PieChart />
-      </div>
+      </Box>
     </Container>
   );
 }

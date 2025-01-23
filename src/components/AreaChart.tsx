@@ -10,9 +10,9 @@ const data = {
         {
             label: 'My First Dataset',
             data: [65, 59, 80, 81, 56, 55, 40],
-            fill: true,  // Enable fill
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgb(75, 192, 192)',
+            fill: true, 
+            backgroundColor: 'rgba(117, 217, 217, 0.37)',
+            borderColor: 'rgba(35, 203, 85, 0.91)',
             tension: 0.1
         }
     ]
