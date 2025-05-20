@@ -1,25 +1,21 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   useSensor,
+  useSensors,
+  DragStartEvent,
   DragEndEvent,
+  DragOverlay,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { SortableItem } from "./Sort";
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import { arrayMove } from "@dnd-kit/sortable";
+import DroppableColumn from "./DroppableColumn";
+import { Task, Columns } from "../types/types";
 
-type Task = { id: string; title: string };
 
-type Columns = {
-  [key: string]: Task[];
-};
 
 const initialColumns: Columns = {
   "to-do": [
@@ -36,97 +32,125 @@ const initialColumns: Columns = {
   ],
 };
 
-export const Board = () => {
+const Board = () => {
+  const [columns, setColumns] = useState(initialColumns);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const sensors = useSensors(useSensor(PointerSensor));
 
-  const [columns, setColumns] = useState<Columns>(initialColumns);
-  const [isClient, setIsClient] = useState(false); 
+  const activeTask: Task | undefined = activeId
+    ? Object.values(columns).flat().find((task) => task.id === activeId)
+    : undefined;
 
-  const sensor = useSensor(PointerSensor);
+  const handleDragStart = (event: DragStartEvent) => {
+    console.log("Dragging:", event.active.id);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const sourceColumnId = Object.keys(columns).find((key) =>
-      columns[key].some((task) => task.id === active.id)
-    )!;
-    const destinationColumnId = Object.keys(columns).find((key) =>
-      columns[key].some((task) => task.id === over.id)
-    )!;
-
-    const activeTask = columns[sourceColumnId].find(
-      (task) => task.id === active.id
-    )!;
-
-    if (sourceColumnId === destinationColumnId) {
-      const reorderedTasks = arrayMove(
-        columns[sourceColumnId],
-        columns[sourceColumnId].findIndex((task) => task.id === active.id),
-        columns[sourceColumnId].findIndex((task) => task.id === over.id)
-      );
-
-      setColumns((prev) => ({
-        ...prev,
-        [sourceColumnId]: reorderedTasks,
-      }));
-    } else {
-      const updatedSource = columns[sourceColumnId].filter(
-        (task) => task.id !== active.id
-      );
-      const updatedDestination = [
-        ...columns[destinationColumnId],
-        activeTask,
-      ];
-
-      setColumns((prev) => ({
-        ...prev,
-        [sourceColumnId]: updatedSource,
-        [destinationColumnId]: updatedDestination,
-      }));
-    }
+    setActiveId(String(event.active.id));
   };
 
-
-  useEffect(() => {
-    setIsClient(true); 
-  }, []);
-
-  if (!isClient) {
-    return null;
+const handleDragEnd = (event: DragEndEvent) => {
+  const { active, over } = event;
+  if (!over || active.id === over.id) {
+    setActiveId(null);
+    return;
   }
+
+  const activeIdStr = String(active.id);
+  const overIdStr = String(over.id);
+
+  
+  const sourceCol = Object.keys(columns).find(colId =>
+    columns[colId].some(task => task.id === activeIdStr)
+  );
+
+ 
+  const isOverColumn = Object.keys(columns).includes(overIdStr);
+  const destCol = isOverColumn 
+    ? overIdStr 
+    : Object.keys(columns).find(colId =>
+        columns[colId].some(task => task.id === overIdStr)
+      );
+
+  if (!sourceCol || !destCol) {
+    setActiveId(null);
+    return;
+  }
+
+ 
+  if (sourceCol === destCol) {
+    const oldIndex = columns[sourceCol].findIndex(t => t.id === activeIdStr);
+    const newIndex = columns[destCol].findIndex(t => t.id === overIdStr);
+    
+    setColumns(prev => ({
+      ...prev,
+      [sourceCol]: arrayMove(prev[sourceCol], oldIndex, newIndex)
+    }));
+  } else {
+    
+    const sourceTasks = [...columns[sourceCol]];
+    const destTasks = [...columns[destCol]];
+    const activeIndex = sourceTasks.findIndex(t => t.id === activeIdStr);
+    const [movedTask] = sourceTasks.splice(activeIndex, 1);
+    
+    
+    if (isOverColumn) {
+      destTasks.push(movedTask);
+    } else {
+      const overIndex = destTasks.findIndex(t => t.id === overIdStr);
+      destTasks.splice(overIndex, 0, movedTask);
+    }
+
+    setColumns(prev => ({
+      ...prev,
+      [sourceCol]: sourceTasks,
+      [destCol]: destTasks
+    }));
+  }
+
+  setActiveId(null);
+};
 
   return (
     <DndContext
-      sensors={[sensor]}
+      sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <Box display="flex" justifyContent="space-around" p={2}>
+      <Box display="flex" gap={2} p={2}>
         {Object.entries(columns).map(([columnId, tasks]) => (
-          <Box
+  <DroppableColumn
             key={columnId}
+            columnId={columnId}
+            tasks={tasks} activeId={activeId} activeTask={activeTask}  />
+))}
+
+      </Box>
+
+     
+<DragOverlay adjustScale={false} zIndex={999}>
+        {activeTask ? (
+          <Box
             sx={{
+              p: 1,
+              mb: 1,
               border: "1px solid gray",
-              borderRadius: "8px",
-              padding: "16px",
-              width: "30%",
+              borderRadius: 1,
+              bgcolor: "orange",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              transform: "translate3d(0,0,0) scale(1.02)",
+              cursor: "grabbing",
+              opacity: 0.8,
             }}
           >
-            <Typography variant="h6" textAlign="center">
-              {columnId.toUpperCase()} ({tasks.length} tasks)
-            </Typography>
-            <SortableContext
-              items={tasks.map((task) => task.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              {tasks.map((task) => (
-                <SortableItem key={task.id} id={task.id} title={task.title} />
-              ))}
-            </SortableContext>
+            {activeTask.title}
           </Box>
-        ))}
-      </Box>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };
+
+export default Board;
+
+
 

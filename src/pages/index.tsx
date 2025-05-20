@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { Board } from '../components/Board';
+import  Board  from '../components/Board';
 
 const Home = () => {
   return (
